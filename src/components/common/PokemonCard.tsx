@@ -1,4 +1,4 @@
-import PokemonData from "../../types/PokemonData";
+import PokemonData from "../../types/pokemonData";
 
 const PokemonCard: React.FC<PokemonData> = (pokemon) => (
   <a href={pokemon.url} className="group shadow-grey shadow-lg hover:shadow-xl">

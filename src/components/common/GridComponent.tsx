@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PokemonData from "../../types/PokemonData";
+import PokemonData from "../../types/pokemonData";
 import PokemonCard from "./PokemonCard";
 
 // const data = [

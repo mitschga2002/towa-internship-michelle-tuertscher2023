@@ -52,14 +52,22 @@ import { useEffect, useState } from "react";
 //   },
 // ];
 
+interface PokemonData {
+  name: string;
+  imageUrl: string;
+  text: string;
+  url: string;
+}
+
 const GridComponent = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<PokemonData[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://pokeapi.co/api/v2/pokemon?limit=10"
+          "https://pokeapi.co/api/v2/pokemon?limit=20"
         );
         const result = await response.json();
 
@@ -88,28 +96,52 @@ const GridComponent = () => {
     fetchData();
   }, []);
 
+  const filteredData = data.filter((pokemon) =>
+    pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchTerm = e.target.value;
+
+    if (newSearchTerm.length >= 3 || newSearchTerm.length === 0) {
+      setSearchTerm(newSearchTerm);
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {data.map((pokemon) => (
-        <a
-          href={pokemon.url}
-          key={pokemon.name}
-          className="group  shadow-grey shadow-lg hover:shadow-xl"
-        >
-          <div className="bg-white p-4 rounded-lg overflow-hidden transition-transform duration-300 transform hover:scale-105">
-            <img
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.url
-                .split("/")
-                .slice(-2, -1)}.png`}
-              alt={pokemon.name}
-              className="w-full h-40 mb-4 object-contain"
-            />
-            <h3 className="text-lg font-semibold mb-2">{pokemon.name}</h3>
-            <p className="text-sm text-gray-600 mb-2">{pokemon.text}</p>
-          </div>
-        </a>
-      ))}
-    </div>
+    <>
+      <input
+        type="text"
+        placeholder="Search"
+        className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+        onChange={handleSearchChange}
+      />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {filteredData.length > 0 ? (
+          filteredData.map((pokemon) => (
+            <a
+              href={pokemon.url}
+              key={pokemon.name}
+              className="group  shadow-grey shadow-lg hover:shadow-xl"
+            >
+              <div className="bg-white p-4 rounded-lg overflow-hidden transition-transform duration-300 transform hover:scale-105">
+                <img
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.url
+                    .split("/")
+                    .slice(-2, -1)}.png`}
+                  alt={pokemon.name}
+                  className="w-full h-40 mb-4 object-contain"
+                />
+                <h3 className="text-lg font-semibold mb-2">{pokemon.name}</h3>
+                <p className="text-sm text-gray-600 mb-2">{pokemon.text}</p>
+              </div>
+            </a>
+          ))
+        ) : (
+          <p className="">No results found</p>
+        )}
+      </div>
+    </>
   );
 };
 

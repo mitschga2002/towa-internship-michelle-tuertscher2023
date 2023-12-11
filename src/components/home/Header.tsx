@@ -3,7 +3,7 @@ import Navigation from "../common/Navigation";
 
 const Header = () => {
   return (
-    <header className="p-10 w-full flex justify-between items-center">
+    <header className="p-10 container mx-auto flex justify-between items-center">
       <Logo />
       <Navigation />
     </header>

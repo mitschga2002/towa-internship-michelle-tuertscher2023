@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import PokemonData from "../../types/PokemonData";
+import PokemonCard from "./PokemonCard";
 
 // const data = [
 //   {
@@ -51,13 +53,6 @@ import { useEffect, useState } from "react";
 //     url: "https://example.com/cat7",
 //   },
 // ];
-
-interface PokemonData {
-  name: string;
-  imageUrl: string;
-  text: string;
-  url: string;
-}
 
 const GridComponent = () => {
   const [data, setData] = useState<PokemonData[]>([]);
@@ -119,23 +114,7 @@ const GridComponent = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {filteredData.length > 0 ? (
           filteredData.map((pokemon) => (
-            <a
-              href={pokemon.url}
-              key={pokemon.name}
-              className="group  shadow-grey shadow-lg hover:shadow-xl"
-            >
-              <div className="bg-white p-4 rounded-lg overflow-hidden transition-transform duration-300 transform hover:scale-105">
-                <img
-                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.url
-                    .split("/")
-                    .slice(-2, -1)}.png`}
-                  alt={pokemon.name}
-                  className="w-full h-40 mb-4 object-contain"
-                />
-                <h3 className="text-lg font-semibold mb-2">{pokemon.name}</h3>
-                <p className="text-sm text-gray-600 mb-2">{pokemon.text}</p>
-              </div>
-            </a>
+            <PokemonCard key={pokemon.name} {...pokemon} />
           ))
         ) : (
           <p className="">No results found</p>
